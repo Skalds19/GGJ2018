@@ -6,6 +6,7 @@ public class Tribe : MonoBehaviour {
 
     public GameObject tribeMember;
     public GameObject spawnLocation;
+    public GameObject resource;
 
     public int resourceType;
 
@@ -54,6 +55,8 @@ public class Tribe : MonoBehaviour {
         people += 1;
         Instantiate(tribeMember, spawnLocation.transform.position, spawnLocation.transform.rotation, spawnLocation.transform);
     }
+
+
     private void OnMouseDown()
     {   
         if( food >= 30 && water >= 30 && wool >= 30 )
