@@ -4,21 +4,24 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-    public GameObject lightObj;
+	public GameObject lightObj;
+	public static GameManager instance;
+	public GameObject selectedObj= null;
     public int time = 5;
+
 
     private int timeCounter = 0;
     private float angle;
     private void Start()
     {
         StartCoroutine("passTime");
+		instance = this;
     }
     private void Update()
     {
- 
-           // float angle = Mathf.LerpAngle(minAngle, maxAngle, Time.time);
-           //lightObj.transform.eulerAngles = new Vector3( angle, 0, 0);
-
+		if (Input.GetKeyDown ("escape")) {
+			selectedObj = null;
+		}
     }
 
     IEnumerator passTime()

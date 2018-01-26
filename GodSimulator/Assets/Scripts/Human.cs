@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Human : MonoBehaviour
 {
@@ -10,11 +11,12 @@ public class Human : MonoBehaviour
     public float fatigue = 100;
     public float cold    = 100;
     public float joy     = 100;
-	private bool mouseObject = false;
-	private bool isSelected = false;
+	public NavMeshAgent agent;
+
 
     void Start ()
     {
+		agent = GetComponent<NavMeshAgent> ();
         StartCoroutine("live");
     }
 
@@ -39,5 +41,14 @@ public class Human : MonoBehaviour
     {
         DestroyObject(gameObject);
     }
+
+	private void OnMouseDown(){
+		if (GameManager.instance.selectedObj == null)
+			GameManager.instance.selectedObj = gameObject;
+		else {
+			agent.destination = GameManager.instance.selectedObj.transform.position;
+			GameManager.instance.selectedObj = null;
+		}
+	}
 
 }
