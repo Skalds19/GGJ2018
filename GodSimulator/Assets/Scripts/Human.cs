@@ -15,12 +15,6 @@ public class Human : MonoBehaviour
     {
         StartCoroutine("live");
     }
-	
-	
-	void Update ()
-    {
-		
-	}
 
     IEnumerator live()
     {
