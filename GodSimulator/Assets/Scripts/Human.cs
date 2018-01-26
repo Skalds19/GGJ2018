@@ -10,6 +10,8 @@ public class Human : MonoBehaviour
     public float fatigue = 100;
     public float cold    = 100;
     public float joy     = 100;
+	private bool mouseObject = false;
+	private bool isSelected = false;
 
     void Start ()
     {
@@ -37,4 +39,5 @@ public class Human : MonoBehaviour
     {
         DestroyObject(gameObject);
     }
+
 }
