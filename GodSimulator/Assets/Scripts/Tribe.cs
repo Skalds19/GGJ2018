@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Tribe : MonoBehaviour {
 
     public GameObject tribeMember;
     public GameObject spawnLocation;
     public GameObject resource;
+    public GameObject panel;
 
     public int resourceType;
 
@@ -16,6 +18,20 @@ public class Tribe : MonoBehaviour {
     private int wool = 0;
     private int tool = 0;
 
+    private void Start()
+    {
+        panel.transform.GetChild(0).GetComponent<Text>().text = food.ToString();
+        panel.transform.GetChild(1).GetComponent<Text>().text = water.ToString();
+        panel.transform.GetChild(2).GetComponent<Text>().text = wool.ToString();
+        panel.transform.GetChild(3).GetComponent<Text>().text = tool.ToString();
+    }
+    private void Update()
+    {
+        panel.transform.GetChild(0).GetComponent<Text>().text = food.ToString();
+        panel.transform.GetChild(1).GetComponent<Text>().text = water.ToString();
+        panel.transform.GetChild(2).GetComponent<Text>().text = wool.ToString();
+        panel.transform.GetChild(3).GetComponent<Text>().text = tool.ToString();
+    }
     public void changeFoodSupply( int changeAmount )
     {
         food += changeAmount;
