@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class Tribe : MonoBehaviour {
 
@@ -16,7 +17,9 @@ public class Tribe : MonoBehaviour {
     private int food = 0;
     private int water = 0;
     private int wool = 0;
-    private int tool = 0;
+	private int tool = 0;
+
+	private NavMeshAgent agent;
 
     private void Start()
     {
@@ -75,14 +78,21 @@ public class Tribe : MonoBehaviour {
 
     private void OnMouseDown()
     {   
-        if( food >= 30 && water >= 30 && wool >= 30 )
-        {
-            food -= 30;
-            water -= 30;
-            wool -= 30;
-            increasePopulation();
-        }
-        
+		if (GameManager.instance.selectedObj == null) {
+			if( food >= 30 && water >= 30 && wool >= 30 )
+			{
+				food -= 30;
+				water -= 30;
+				wool -= 30;
+				increasePopulation();
+			}
+		}
+		else {
+			agent = GameManager.instance.selectedObj.GetComponent<NavMeshAgent> ();
+			agent.destination = transform.position;
+			//GameManager.instance.selectedObj.GetComponent<Human> ().inputActive = true;
+			GameManager.instance.selectedObj = null;
+		}
     }
     
 }

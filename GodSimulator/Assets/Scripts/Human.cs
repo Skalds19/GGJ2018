@@ -11,27 +11,36 @@ public class Human : MonoBehaviour
     public float fatigue = 100;
     public float cold    = 100;
     public float joy     = 100;
-	private NavMeshAgent agent;
     private NavMeshAgent thisAgent;
 
-    private Vector3 destination;
-    private bool inputActive = false;
+    //private Vector3 destination;
+    //private bool inputActive = false;
 
     void Start ()
     {
         thisAgent = GetComponent<NavMeshAgent>();
         StartCoroutine("live");
-        destination = transform.parent.GetComponent<Tribe>().resource.transform.position;
+        //destination = transform.parent.GetComponent<Tribe>().resource.transform.position;
 
     }
     private void Update()
-    {   
+    {   /*
+		Vector3 dir;
+		float distanceThisFrame;
         if ( inputActive )
         {
-            return;
+			dir = thisAgent.destination - transform.position;
+			distanceThisFrame = 5 * Time.deltaTime;
+			if (dir.magnitude <= distanceThisFrame + 2.5)
+			{   
+				inputActive = false;
+				destination = transform.parent.GetComponent<Tribe>().resource.transform.position;
+			}
+			transform.Translate(dir.normalized * distanceThisFrame, Space.World);
+			return;
         }
-        Vector3 dir = destination - transform.position;
-        float distanceThisFrame = 5 * Time.deltaTime;
+        dir = destination - transform.position;
+        distanceThisFrame = 5 * Time.deltaTime;
         if (dir.magnitude <= distanceThisFrame + 2.5)
         {   
             if ( destination == transform.parent.transform.position )
@@ -45,7 +54,7 @@ public class Human : MonoBehaviour
             
             return;
         }
-        transform.Translate(dir.normalized * distanceThisFrame, Space.World);
+        transform.Translate(dir.normalized * distanceThisFrame, Space.World);*/
     }
     IEnumerator live()
     {
@@ -85,14 +94,7 @@ public class Human : MonoBehaviour
 
 	private void OnMouseDown()
     {
-        inputActive = true;
-		if (GameManager.instance.selectedObj == null)
-			GameManager.instance.selectedObj = gameObject;
-		else {
-			agent = GameManager.instance.selectedObj.GetComponent<NavMeshAgent> ();
-			agent.destination = transform.position;
-			GameManager.instance.selectedObj = null;
-		}
+		GameManager.instance.selectedObj = gameObject;
 	}
 
 }
