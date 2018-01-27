@@ -21,55 +21,24 @@ public class Human : MonoBehaviour
 	public int totalAmount = 0;
 	private NavMeshAgent thisAgent;
 	private GameObject resource;
-
-    //private Vector3 destination;
-    //private bool inputActive = false;
+	private Vector3 tResource;
+	private bool isGathering = false;
 
     void Start ()
     {
         thisAgent = GetComponent<NavMeshAgent>();
         StartCoroutine("live");
-        //destination = transform.parent.GetComponent<Tribe>().resource.transform.position;
-
+		tResource = transform.parent.GetComponent<Tribe> ().resource.transform.position;
     }
     private void Update()
     {   
-		if (thisAgent.destination == transform.parent.GetComponent<Tribe> ().resource.transform.position) {
-			Debug.Log ("gather");
-			if (thisAgent.remainingDistance <= 0.01f)
+		if (Mathf.Abs(thisAgent.destination.x - tResource.x) <= 0.1f && Mathf.Abs(thisAgent.destination.z - tResource.z) <= 0.1) 
+		{
+			if (thisAgent.remainingDistance < 0.01f && isGathering == false) {
 				StartCoroutine ("gather");
-		}
-		/*
-		Vector3 dir;
-		float distanceThisFrame;
-        if ( inputActive )
-        {
-			dir = thisAgent.destination - transform.position;
-			distanceThisFrame = 5 * Time.deltaTime;
-			if (dir.magnitude <= distanceThisFrame + 2.5)
-			{   
-				inputActive = false;
-				destination = transform.parent.GetComponent<Tribe>().resource.transform.position;
 			}
-			transform.Translate(dir.normalized * distanceThisFrame, Space.World);
-			return;
-        }
-        dir = destination - transform.position;
-        distanceThisFrame = 5 * Time.deltaTime;
-        if (dir.magnitude <= distanceThisFrame + 2.5)
-        {   
-            if ( destination == transform.parent.transform.position )
-            {
-                destination = transform.parent.GetComponent<Tribe>().resource.transform.position;
-            }
-            else
-            {
-                destination = transform.parent.transform.position;
-            }
-            
-            return;
-        }
-        transform.Translate(dir.normalized * distanceThisFrame, Space.World);*/
+
+		}
     }
     IEnumerator live()
     {
@@ -89,54 +58,39 @@ public class Human : MonoBehaviour
         }
     }
     IEnumerator gather()
-    {
+	{
+		isGathering = true;
+		yield return new WaitForSeconds(1f);
 		resource = transform.parent.GetComponent<Tribe> ().resource;
-		if (resource.name == "Forest") {
-			if (totalAmount < 20) {
-				wood++;
-				totalAmount++;
-			}
-			else {
-				StopCoroutine ("gather");
-			}
+		if (totalAmount == inventorySize) {
+			isGathering = false;
+			StopCoroutine ("gather");
 		}
-		if (resource.name == "Fountain") {
-			if (totalAmount < 20) {
-				water++;
-				totalAmount++;
-			}
-			else {
-				StopCoroutine ("gather");
-			}
+		else if (resource.name == "Forest") {
+			wood++;
+			totalAmount++;
+			StartCoroutine ("gather");
+		}
+		else if (resource.name == "Fountain") {
+			water++;
+			totalAmount++;
+			StartCoroutine ("gather");
 		}
 		if (resource.name == "Bushes") {
-			if (totalAmount < 20) {
-				food++;
-				totalAmount++;
-			}
-			else {
-				StopCoroutine ("gather");
-			}
+			food++;
+			totalAmount++;
+			StartCoroutine ("gather");
 		}
-		if (resource.name == "Sheep") {
-			if (totalAmount < 20) {
-				food++;
-				totalAmount++;
-			}
-			else {
-				StopCoroutine ("gather");
-			}
+		else if (resource.name == "Sheep") {
+			wool++;
+			totalAmount++;
+			StartCoroutine ("gather");
 		}
-		if (resource.name == "dans pisti") {
-			if (totalAmount < 20) {
-				social++;
-				totalAmount++;
-			}
-			else {
-				StopCoroutine ("gather");
-			}
+		else if (resource.name == "dans pisti") {
+			social++;
+			totalAmount++;
+			StartCoroutine ("gather");
 		}
-        yield return new WaitForSeconds(1f);
 
     }
     IEnumerator deliver()
