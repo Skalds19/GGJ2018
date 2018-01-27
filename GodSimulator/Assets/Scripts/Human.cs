@@ -107,6 +107,8 @@ public class Human : MonoBehaviour
 	private void OnMouseDown()
     {
 		GameManager.instance.selectedObj = gameObject;
+        transform.parent.GetComponent<Tribe>().highlighter.GetComponent<Highlight>().human = transform;
+        transform.parent.GetComponent<Tribe>().highlighter.SetActive(true);
 	}
 
 }

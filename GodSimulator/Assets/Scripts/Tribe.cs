@@ -10,6 +10,7 @@ public class Tribe : MonoBehaviour {
     public GameObject spawnLocation;
     public GameObject resource;
     public GameObject panel;
+    public GameObject highlighter;
 
     public int resourceType;
 
@@ -92,6 +93,7 @@ public class Tribe : MonoBehaviour {
 			agent.destination = transform.position;
 			//GameManager.instance.selectedObj.GetComponent<Human> ().inputActive = true;
 			GameManager.instance.selectedObj = null;
+            highlighter.SetActive(false);
 		}
     }
     
