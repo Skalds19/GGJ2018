@@ -23,6 +23,7 @@ public class Human : MonoBehaviour
 	private GameObject resource;
 	private Vector3 tResource;
 	private bool isGathering = false;
+	private bool isDelivering = false;
 
     void Start ()
     {
@@ -36,6 +37,13 @@ public class Human : MonoBehaviour
 		{
 			if (thisAgent.remainingDistance < 0.01f && isGathering == false) {
 				StartCoroutine ("gather");
+			}
+
+		}
+		if (Mathf.Abs(thisAgent.destination.x - transform.parent.position.x) <= 0.1f && Mathf.Abs(thisAgent.destination.z - transform.parent.position.z) <= 0.1) 
+		{
+			if (thisAgent.remainingDistance < 0.01f && isDelivering == false) {
+				StartCoroutine ("deliver");
 			}
 
 		}
@@ -62,9 +70,8 @@ public class Human : MonoBehaviour
 		isGathering = true;
 		yield return new WaitForSeconds(1f);
 		resource = transform.parent.GetComponent<Tribe> ().resource;
-		if (totalAmount == inventorySize) {
+		if (totalAmount == inventorySize || !(Mathf.Abs(transform.position.x - tResource.x) <= 0.1f && Mathf.Abs(transform.position.z - tResource.z) <= 0.1)) {
 			isGathering = false;
-			StopCoroutine ("gather");
 		}
 		else if (resource.name == "Forest") {
 			wood++;
@@ -76,7 +83,7 @@ public class Human : MonoBehaviour
 			totalAmount++;
 			StartCoroutine ("gather");
 		}
-		if (resource.name == "Bushes") {
+		else if (resource.name == "Bushes") {
 			food++;
 			totalAmount++;
 			StartCoroutine ("gather");
@@ -95,8 +102,36 @@ public class Human : MonoBehaviour
     }
     IEnumerator deliver()
     {
-        thisAgent.destination = transform.parent.position;
-        yield return new WaitForSeconds(3f);
+		isDelivering = true;
+		yield return new WaitForSeconds(1f);
+		if (!(Mathf.Abs (transform.position.x - transform.parent.position.x) <= 0.05f && Mathf.Abs (transform.position.z - transform.parent.position.z) <= 0.05)) {
+			isDelivering = false;
+		}
+		else if (wood != 0) {
+			wood--;
+			totalAmount--;
+			StartCoroutine ("deliver");
+		}
+		else if (water != 0) {
+			water--;
+			totalAmount--;
+			StartCoroutine ("deliver");
+		}
+		else if (food != 0) {
+			food--;
+			totalAmount--;
+			StartCoroutine ("deliver");
+		}
+		else if (wool != 0) {
+			wool--;
+			totalAmount--;
+			StartCoroutine ("deliver");
+		}
+		else if (social != 0) {
+			social--;
+			totalAmount--;
+			StartCoroutine ("deliver");
+		}
     }
 
     void die()
@@ -107,8 +142,6 @@ public class Human : MonoBehaviour
 	private void OnMouseDown()
     {
 		GameManager.instance.selectedObj = gameObject;
-        transform.parent.GetComponent<Tribe>().highlighter.GetComponent<Highlight>().human = transform;
-        transform.parent.GetComponent<Tribe>().highlighter.SetActive(true);
 	}
 
 }
