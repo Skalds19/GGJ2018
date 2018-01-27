@@ -5,7 +5,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
 	public GameObject lightObj;
-    public GameObject ptLightObj;
+	public GameObject ptLightObj;
+	public GameObject highlighter;
     public static GameManager instance;
 	public GameObject selectedObj= null;
     public int time;
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour {
 		if (Input.GetKeyDown ("escape"))
         {
 			selectedObj = null;
+			highlighter.SetActive (false);
 		}
     }
 
