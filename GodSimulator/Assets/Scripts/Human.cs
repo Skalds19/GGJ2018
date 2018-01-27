@@ -46,7 +46,8 @@ public class Human : MonoBehaviour
 		if (GameManager.instance.selectedObj == null)
 			GameManager.instance.selectedObj = gameObject;
 		else {
-			agent.destination = GameManager.instance.selectedObj.transform.position;
+			agent = GameManager.instance.selectedObj.GetComponent<NavMeshAgent> ();
+			agent.destination = transform.position;
 			GameManager.instance.selectedObj = null;
 		}
 	}
