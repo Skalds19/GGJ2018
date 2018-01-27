@@ -147,6 +147,14 @@ MonoBehaviour:
   fatigue: 100
   cold: 100
   joy: 100
+  inventorySize: 20
+  wood: 0
+  food: 0
+  water: 0
+  wool: 0
+  social: 0
+  totalAmount: 0
+  popup: {fileID: 0}
 --- !u!136 &136590060304368778
 CapsuleCollider:
   m_ObjectHideFlags: 1

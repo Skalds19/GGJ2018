@@ -19,8 +19,10 @@ public class Human : MonoBehaviour
 	public int wool = 0;
 	public int social = 0;
 	public int totalAmount = 0;
-	private NavMeshAgent thisAgent;
-	private GameObject resource;
+
+    private NavMeshAgent thisAgent;
+    private GameObject popup;
+    private GameObject resource;
 	private Vector3 tResource;
 	private bool isGathering = false;
 	private bool isDelivering = false;
@@ -30,6 +32,7 @@ public class Human : MonoBehaviour
         thisAgent = GetComponent<NavMeshAgent>();
         StartCoroutine("live");
 		tResource = transform.parent.GetComponent<Tribe> ().resource.transform.position;
+        popup = GameObject.FindGameObjectWithTag("popup");
     }
     private void Update()
     {   
@@ -144,6 +147,7 @@ public class Human : MonoBehaviour
 		GameManager.instance.selectedObj = gameObject;
         transform.parent.GetComponent<Tribe>().highlighter.GetComponent<Highlight>().human = transform;
         transform.parent.GetComponent<Tribe>().highlighter.SetActive(true);
+        //popup.GetComponent<PopUp>().human = gameObject;
 
     }
 
