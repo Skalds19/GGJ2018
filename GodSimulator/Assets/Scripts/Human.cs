@@ -11,7 +11,16 @@ public class Human : MonoBehaviour
     public float fatigue = 100;
     public float cold    = 100;
     public float joy     = 100;
-    private NavMeshAgent thisAgent;
+
+	public int inventorySize = 20;
+	public int wood = 0;
+	public int food = 0;
+	public int water = 0;
+	public int wool = 0;
+	public int social = 0;
+	public int totalAmount = 0;
+	private NavMeshAgent thisAgent;
+	private GameObject resource;
 
     //private Vector3 destination;
     //private bool inputActive = false;
@@ -24,7 +33,13 @@ public class Human : MonoBehaviour
 
     }
     private void Update()
-    {   /*
+    {   
+		if (thisAgent.destination == transform.parent.GetComponent<Tribe> ().resource.transform.position) {
+			Debug.Log ("gather");
+			if (thisAgent.remainingDistance <= 0.01f)
+				StartCoroutine ("gather");
+		}
+		/*
 		Vector3 dir;
 		float distanceThisFrame;
         if ( inputActive )
@@ -75,16 +90,59 @@ public class Human : MonoBehaviour
     }
     IEnumerator gather()
     {
-        thisAgent.destination = transform.parent.GetComponent<Tribe>().resource.transform.position;
-        yield return new WaitForSeconds(3f);
-        StartCoroutine("deliver");
+		resource = transform.parent.GetComponent<Tribe> ().resource;
+		if (resource.name == "Forest") {
+			if (totalAmount < 20) {
+				wood++;
+				totalAmount++;
+			}
+			else {
+				StopCoroutine ("gather");
+			}
+		}
+		if (resource.name == "Fountain") {
+			if (totalAmount < 20) {
+				water++;
+				totalAmount++;
+			}
+			else {
+				StopCoroutine ("gather");
+			}
+		}
+		if (resource.name == "Bushes") {
+			if (totalAmount < 20) {
+				food++;
+				totalAmount++;
+			}
+			else {
+				StopCoroutine ("gather");
+			}
+		}
+		if (resource.name == "Sheep") {
+			if (totalAmount < 20) {
+				food++;
+				totalAmount++;
+			}
+			else {
+				StopCoroutine ("gather");
+			}
+		}
+		if (resource.name == "dans pisti") {
+			if (totalAmount < 20) {
+				social++;
+				totalAmount++;
+			}
+			else {
+				StopCoroutine ("gather");
+			}
+		}
+        yield return new WaitForSeconds(1f);
 
     }
     IEnumerator deliver()
     {
         thisAgent.destination = transform.parent.position;
         yield return new WaitForSeconds(3f);
-        StartCoroutine("gather");
     }
 
     void die()
