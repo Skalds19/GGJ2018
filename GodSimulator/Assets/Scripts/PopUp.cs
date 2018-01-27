@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PopUp : MonoBehaviour {
 
     public GameObject human;
@@ -12,13 +13,14 @@ public class PopUp : MonoBehaviour {
     }
     public void eat()
     {
-        Human humanscript = human.GetComponent<Human>();
+        
         if ( human == null )
         {
             return;
         }
-        else if( humanscript.food > 0 )
+        else if(human.GetComponent<Human>().food > 0 )
         {
+            Human humanscript = human.GetComponent<Human>();
             humanscript.food--;
             humanscript.totalAmount--;
             humanscript.hunger += 10;
@@ -34,13 +36,14 @@ public class PopUp : MonoBehaviour {
     }
     public void drink()
     {
-        Human humanscript = human.GetComponent<Human>();
+        
         if (human == null)
         {
             return;
         }
-        else if (humanscript.water > 0)
+        else if (human.GetComponent<Human>().water > 0)
         {
+            Human humanscript = human.GetComponent<Human>();
             humanscript.water--;
             humanscript.totalAmount--;
             humanscript.thirst += 10;
@@ -56,13 +59,14 @@ public class PopUp : MonoBehaviour {
     }
     public void warm()
     {
-        Human humanscript = human.GetComponent<Human>();
+        
         if (human == null)
         {
             return;
         }
-        else if (humanscript.wool > 0)
+        else if (human.GetComponent<Human>().wool > 0)
         {
+            Human humanscript = human.GetComponent<Human>();
             humanscript.wool--;
             humanscript.totalAmount--;
             humanscript.cold += 10;
@@ -78,13 +82,13 @@ public class PopUp : MonoBehaviour {
     }
     public void fun()
     {
-        Human humanscript = human.GetComponent<Human>();
         if (human == null)
         {
             return;
         }
-        else if (humanscript.social > 0)
+        else if (human.GetComponent<Human>().social > 0)
         {
+            Human humanscript = human.GetComponent<Human>();
             humanscript.social--;
             humanscript.totalAmount--;
             humanscript.joy += 10;

@@ -1,14 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
 	public GameObject lightObj;
 	public GameObject ptLightObj;
 	public GameObject highlighter;
+
+    public GameObject canvas;
+
     public static GameManager instance;
 	public GameObject selectedObj= null;
+    public GameObject prevObj;
+    public GameObject selectedTribe = null;
     public int time;
 
 
@@ -22,8 +28,21 @@ public class GameManager : MonoBehaviour {
 		instance = this;
     }
     private void Update()
-    {
-		if (Input.GetKeyDown ("escape"))
+    {   
+        if (prevObj != null )
+        {
+            canvas.transform.GetChild(0).GetChild(4).GetComponent<Text>().text = prevObj.GetComponent<Human>().hunger.ToString();
+            canvas.transform.GetChild(0).GetChild(5).GetComponent<Text>().text = prevObj.GetComponent<Human>().thirst.ToString();
+            canvas.transform.GetChild(0).GetChild(6).GetComponent<Text>().text = prevObj.GetComponent<Human>().cold.ToString();
+            canvas.transform.GetChild(0).GetChild(7).GetComponent<Text>().text = prevObj.GetComponent<Human>().joy.ToString();
+
+            canvas.transform.GetChild(0).GetChild(9).GetComponent<Text>().text = prevObj.GetComponent<Human>().food.ToString();
+            canvas.transform.GetChild(0).GetChild(10).GetComponent<Text>().text = prevObj.GetComponent<Human>().water.ToString();
+            canvas.transform.GetChild(0).GetChild(11).GetComponent<Text>().text = prevObj.GetComponent<Human>().wool.ToString();
+            canvas.transform.GetChild(0).GetChild(12).GetComponent<Text>().text = prevObj.GetComponent<Human>().social.ToString();
+        }
+
+        if (Input.GetKeyDown ("escape"))
         {
 			selectedObj = null;
 			highlighter.SetActive (false);

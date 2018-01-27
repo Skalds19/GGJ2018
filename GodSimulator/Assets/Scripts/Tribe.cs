@@ -80,11 +80,11 @@ public class Tribe : MonoBehaviour {
     private void OnMouseDown()
     {   
 		if (GameManager.instance.selectedObj == null) {
-			if( food >= 30 && water >= 30 && wool >= 30 )
+			if( food >= 20 && water >= 20  )
 			{
-				food -= 30;
-				water -= 30;
-				wool -= 30;
+				food -= 20;
+				water -= 20;
+				//wool -= 20;
 				increasePopulation();
 			}
 		}
@@ -93,6 +93,7 @@ public class Tribe : MonoBehaviour {
 			agent.destination = transform.position;
 			//GameManager.instance.selectedObj.GetComponent<Human> ().inputActive = true;
 			GameManager.instance.selectedObj = null;
+            GameManager.instance.selectedTribe = transform.gameObject;
             highlighter.SetActive(false);
 		}
     }

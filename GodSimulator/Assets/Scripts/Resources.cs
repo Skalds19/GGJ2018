@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class Resources : MonoBehaviour {
-
+    public GameObject highlighter;
 	private NavMeshAgent agent;
 	private GameObject resource;
 	// Use this for initialization
@@ -24,6 +24,7 @@ public class Resources : MonoBehaviour {
 				agent = GameManager.instance.selectedObj.GetComponent<NavMeshAgent> ();
 				agent.destination = transform.position;
 				GameManager.instance.selectedObj = null;
+                highlighter.SetActive(false);
 			}
 		}
 	}

@@ -23,33 +23,44 @@ public class Human : MonoBehaviour
     private NavMeshAgent thisAgent;
     private GameObject popup;
     private GameObject resource;
+    private int selfResource;
 	private Vector3 tResource;
 	private bool isGathering = false;
 	private bool isDelivering = false;
-
+    // 0 joy, 1 food, 2 water, 3 wood, 4 wool
     void Start ()
     {
         thisAgent = GetComponent<NavMeshAgent>();
         StartCoroutine("live");
 		tResource = transform.parent.GetComponent<Tribe> ().resource.transform.position;
         popup = GameObject.FindGameObjectWithTag("popup");
+
     }
     private void Update()
-    {   
-		if (Mathf.Abs(thisAgent.destination.x - tResource.x) <= 0.1f && Mathf.Abs(thisAgent.destination.z - tResource.z) <= 0.1) 
-		{
-			if (thisAgent.remainingDistance < 0.01f && isGathering == false) {
-				StartCoroutine ("gather");
-			}
+    {
+        if (Mathf.Abs(thisAgent.destination.x - tResource.x) <= 0.1f && Mathf.Abs(thisAgent.destination.z - tResource.z) <= 0.1)
+        {
+            if (thisAgent.remainingDistance < 0.01f && isGathering == false)
+            {
+                StartCoroutine("gather");
+            }
 
-		}
-		if (Mathf.Abs(thisAgent.destination.x - transform.parent.position.x) <= 0.1f && Mathf.Abs(thisAgent.destination.z - transform.parent.position.z) <= 0.1) 
-		{
-			if (thisAgent.remainingDistance < 0.01f && isDelivering == false) {
-				StartCoroutine ("deliver");
-			}
+        }
+        else if (Mathf.Abs(thisAgent.destination.x - transform.parent.position.x) <= 0.1f && Mathf.Abs(thisAgent.destination.z - transform.parent.position.z) <= 0.1)
+        {
+            if (thisAgent.remainingDistance < 0.01f && isDelivering == false)
+            {
+                StartCoroutine("deliver");
+            }
 
-		}
+        }
+        else if (GameManager.instance.selectedTribe != null && Mathf.Abs(thisAgent.destination.x - GameManager.instance.selectedTribe.transform.position.x) <= 0.1f && Mathf.Abs(thisAgent.destination.z - GameManager.instance.selectedTribe.transform.position.z) <= 0.1 && Input.GetMouseButtonDown(0))
+        {
+            if (thisAgent.remainingDistance < 0.01f ) 
+            {
+                StartCoroutine("trade");
+            }
+        }
     }
     IEnumerator live()
     {
@@ -113,30 +124,66 @@ public class Human : MonoBehaviour
 		else if (wood != 0) {
 			wood--;
 			totalAmount--;
+            transform.parent.GetComponent<Tribe>().changeToolSupply(1);
 			StartCoroutine ("deliver");
 		}
 		else if (water != 0) {
 			water--;
 			totalAmount--;
-			StartCoroutine ("deliver");
+            transform.parent.GetComponent<Tribe>().changeWaterSupply(1);
+            StartCoroutine ("deliver");
 		}
 		else if (food != 0) {
 			food--;
 			totalAmount--;
-			StartCoroutine ("deliver");
+            transform.parent.GetComponent<Tribe>().changeFoodSupply(1);
+            StartCoroutine ("deliver");
 		}
 		else if (wool != 0) {
 			wool--;
 			totalAmount--;
-			StartCoroutine ("deliver");
+            transform.parent.GetComponent<Tribe>().changeWoolSupply(1);
+            StartCoroutine ("deliver");
 		}
 		else if (social != 0) {
 			social--;
 			totalAmount--;
-			StartCoroutine ("deliver");
+            StartCoroutine ("deliver");
 		}
     }
-
+    IEnumerator trade()
+    {
+        GameObject tribe = GameManager.instance.selectedTribe;
+        if( tribe.name == "Tribe_red")
+        {
+            social += 10;
+        }
+        else if (tribe.name == "Tribe_green" && tribe.GetComponent<Tribe>().getFood() >= 10 )
+        {
+            tribe.GetComponent<Tribe>().changeFoodSupply(-10);
+            food += 10;
+            // selfres -10
+        }
+        else if (tribe.name == "Tribe_yellow" && tribe.GetComponent<Tribe>().getTool() >= 10)
+        {
+            tribe.GetComponent<Tribe>().changeToolSupply(-10);
+            wood += 10;
+            // selfres -10
+        }
+        else if (tribe.name == "Tribe_blue" && tribe.GetComponent<Tribe>().getWater() >= 10)
+        {
+            tribe.GetComponent<Tribe>().changeWaterSupply(-10);
+            water += 10;
+            // selfres -10
+        }
+        else if (tribe.name == "Tribe_purple" && tribe.GetComponent<Tribe>().getWool() >= 10)
+        {
+            tribe.GetComponent<Tribe>().changeWoolSupply(-10);
+            wool += 10;
+            // selfres -10
+        }
+        yield return null;
+    }
     void die()
     {
         DestroyObject(gameObject);
@@ -145,6 +192,7 @@ public class Human : MonoBehaviour
 	private void OnMouseDown()
     {
 		GameManager.instance.selectedObj = gameObject;
+        GameManager.instance.prevObj = gameObject;
         transform.parent.GetComponent<Tribe>().highlighter.GetComponent<Highlight>().human = transform;
         transform.parent.GetComponent<Tribe>().highlighter.SetActive(true);
         //popup.GetComponent<PopUp>().human = gameObject;
