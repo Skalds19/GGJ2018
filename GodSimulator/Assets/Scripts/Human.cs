@@ -11,15 +11,42 @@ public class Human : MonoBehaviour
     public float fatigue = 100;
     public float cold    = 100;
     public float joy     = 100;
-	public NavMeshAgent agent;
+	private NavMeshAgent agent;
+    private NavMeshAgent thisAgent;
 
+    private Vector3 destination;
+    private bool inputActive = false;
 
     void Start ()
     {
-		agent = GetComponent<NavMeshAgent> ();
+        thisAgent = GetComponent<NavMeshAgent>();
         StartCoroutine("live");
-    }
+        destination = transform.parent.GetComponent<Tribe>().resource.transform.position;
 
+    }
+    private void Update()
+    {   
+        if ( inputActive )
+        {
+            return;
+        }
+        Vector3 dir = destination - transform.position;
+        float distanceThisFrame = 5 * Time.deltaTime;
+        if (dir.magnitude <= distanceThisFrame + 2.5)
+        {   
+            if ( destination == transform.parent.transform.position )
+            {
+                destination = transform.parent.GetComponent<Tribe>().resource.transform.position;
+            }
+            else
+            {
+                destination = transform.parent.transform.position;
+            }
+            
+            return;
+        }
+        transform.Translate(dir.normalized * distanceThisFrame, Space.World);
+    }
     IEnumerator live()
     {
         yield return new WaitForSeconds(1f);
@@ -37,12 +64,28 @@ public class Human : MonoBehaviour
             die();
         }
     }
+    IEnumerator gather()
+    {
+        thisAgent.destination = transform.parent.GetComponent<Tribe>().resource.transform.position;
+        yield return new WaitForSeconds(3f);
+        StartCoroutine("deliver");
+
+    }
+    IEnumerator deliver()
+    {
+        thisAgent.destination = transform.parent.position;
+        yield return new WaitForSeconds(3f);
+        StartCoroutine("gather");
+    }
+
     void die()
     {
         DestroyObject(gameObject);
     }
 
-	private void OnMouseDown(){
+	private void OnMouseDown()
+    {
+        inputActive = true;
 		if (GameManager.instance.selectedObj == null)
 			GameManager.instance.selectedObj = gameObject;
 		else {
